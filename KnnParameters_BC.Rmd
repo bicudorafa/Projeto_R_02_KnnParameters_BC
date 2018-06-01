@@ -1,0 +1,167 @@
+---
+title: "Cancer de Mama: Exemplo da Variacao de Performance Atraves da Mudanca de Parametros"
+author: "Rafael Bicudo Rosa"
+date: "May 31, 8"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Prevendo a Ocorrencia de Cancer
+
+Este trabalho e uma releitura de um projeto integrante do curso Big Data Analytics com R e Microsoft Azure da Formacao Cientista de Dados. O objetivo e analisar dados reais sobre exames de cancer de mama realizados com mulheres nos EUA, usar um modelo 'knn' para prever a ocorrencia de novos casos, e ver a variacao de performance com o ajustamento do valor de um dos parametros.
+
+Os dados de cancer de mama incluem 569 observacoes de biopsias, cada uma com 32 caracteristicas (variaveis), sendo a 1a um numero de identificacao (ID), a 2a o diagnostico do tumor ('B' indicando benigno e 'M' maligno), e o restante 30 medidas laboratoriais numericas. Todas as informacoes foram retiradas do repositorio online da Universidade de Irvine, California (http://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+%28Diagnostic%29).
+
+Todo o projeto sera descrito de acordo com suas etapas. 
+
+
+## Etapa 1 - Coletando os Dados
+
+Assim como descrito acima, os dados serão retirados de um repositorio online contendo a base em si no formato csv, e a informacao de cada uma das caracteristicas.
+
+
+```{r coleta}
+# Coletando dados
+
+# link para os dados
+link_dados <- 'http://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'
+
+# definicao dos nomes das features
+names_bc = c("id", "diagnosis", "radius_mean", "texture_mean", "perimeter_mean", "area_mean", "smoothness_mean",
+          "compactness_mean", "concavity_mean", "points_mean", "symmetry_mean", "dimension_mean", "radius_se",
+          "texture_se", "perimeter_se", "area_se", "smoothness_se", "compactness_se", "concavity_se", "points_se",
+          "symmetry_se", "dimension_se", "radius_worst", "texture_worst", "perimeter_worst", "area_worst",
+          "smoothness_worst", "compactness_worst", "concavity_worst", "points_worst", "symmetry_worst","dimension_worst")
+
+dados <- read.csv(link_dados, stringsAsFactors = F, col.names = names_bc)
+str(dados)
+```
+
+
+## Etapa 2 - Preparacao dos Dados
+
+Durante esta etapa, far-se-ao todas as trasformacoes necessarias a aplicacao do modelo, bem como observacoes interessantes acerca da amostra. 
+
+Independentemente do metodo de aprendizagem de maquina, deve-se sempre excluir variaveis de indentificacao (ID). Embora possuam funcao importante durante etapas de limpeza e organizacao dos dados, sua utilizacao durante a aprendizagem pode levar a resultados equivocados, pois as ID atuariam como preditoras das observacoes existentes embora nao possuam nenhuma informacao relevante além da própria identificacao em si, levando a um problema de sobreidentificacao (overfitting).
+
+Em seguida, o proximo passo e a fatorizacao da caracteristica alvo: se o tumor e benigno ou maligno. Sua transformacao em variavel qualitativa e necessaria ao funcionamento do algoritimo, bem como permite a visualizacao das proporcoes originais atraves de uma tabela.
+
+Por fim, realiza-se a sumarizacao dos atributos com o intuito de identificar a existencia de anomalias, como outliers ou valores missing. Com a percepccao da inexistencia de anomalias, procedeu-se a normalizacao das variaveis numericas, pois, ao se analizar as estatisticas descritivas, percebeu-se como suas grandezas numericas variam, o que poderia causar distorcoes nas relacoes entre as variaveis.
+
+
+```{r preparacao}
+## Etapa 2 - Explorando os Dados
+
+# Excluindo a coluna ID
+dados <- subset(dados, select = - id)
+
+# Realizado o processo de Factoring em nossa variável resposta (por boa parte dos algorítimos exigir)
+dados$diagnosis <- factor(dados$diagnosis, levels = c('B', 'M'), labels = c('Benigno', 'Maligno'))
+
+# Verificado a proporção dos meus dados alvo
+round(prop.table(table(dados$diagnosis))*100, digits = 1)
+
+# Normalização dos dados
+summary(dados)
+
+# função base R para normalização -> scale
+dados_normalizados <- as.data.frame(scale(dados[2:31]))
+
+# Fazendo uma comparação entre algumas features antes e após
+summary(dados[c("radius_mean", "area_mean", "smoothness_mean")])
+summary(dados_normalizados[c("radius_mean", "area_mean", "smoothness_mean")])
+```
+
+
+## Etapa 3 - Treinando o modelo
+
+Com os dados devidamente preparados, pode-se, agora, comecar o processo de treinamento do modelo. Para isso, carregam-se os pacotes necessarios a execucao, dividi-se nosso conjunto em dados de treino e de teste, e se inicia a criacao do 1o modelo com os parametros padroes.
+
+
+```{r treinamento}
+## Etapa 3: Treinando o modelo
+
+# Carregando os pacotes necessários
+# install.packages("class")
+# install.packages("caTools")
+library(caTools)
+library(class)
+
+# Criando os dados de treino e os de teste (obs.: neste dataset em especial não seria 
+# necessário por ser randomizado originalmente)
+set.seed(69)
+amostra <- sample.split(dados$diagnosis, SplitRatio = 0.70)
+dados_treino <- as.data.frame(subset(dados_normalizados, amostra == T))
+dados_teste <- as.data.frame(subset(dados_normalizados, amostra == F))
+
+# Criando os labels para identificação no modelo
+dados_treino_labels <- subset(dados[1], amostra == T)[,1]
+dados_teste_labels <- subset(dados[1], amostra == F)[,1]
+
+# Criando o Modelo
+modelo <- knn(train = dados_treino,
+              test = dados_teste,
+              cl = dados_treino_labels)
+
+```
+
+
+## Etapa 4 - Avaliando a Performance do Modelo
+
+Nesta etapa, acontecerá a analise da eficacia do modelo. Para se chegar a esse resultado, o pacote 'gmodels' será carregado e utilizado para construir uma matriz de confusao, ou tabela cruzada, com o objetivo de se identifcar os casos corretamente previsto, no caso, com 4 falso negativos ou 97,6 % de acuracia.
+
+
+```{r performance}
+# Carregando pacote necessario
+# install.packages("gmodels")
+library(gmodels)
+
+# Criando uma tabela cruzada dos dados previstos x dados atuais, ou seja, uma ConfusionMatrix e analisando taxa de erro
+CrossTable(x = dados_teste_labels, y = modelo, prop.chisq = FALSE)
+taxa_erro_inicial = mean(dados_teste_labels != modelo)
+
+```
+
+
+## Etapa 5 - Otimizacao do Modelo
+
+Por último, como objetivo do trabalho, analizar-se-a a mudanca na performance do modelo atraves da variacao do parametro k, ou seja, o numero de vizinhos mais proximos (em distancia euclidiana) utilizados para definir a classificacao. Assim será feito um plot, com o uso do pacote 'ggplot2', demonstrando como a performance, de fato, altera-se consideravelmente com uma adocao de 'k' variando de 1 ate 25.
+
+ 
+```{r otimizacao}
+## Otimizacao do Modelo
+
+# Carregando pacote necessario
+# install.package('ggplot2')
+library(ggplot2)
+
+# Calculando função taxa de erro em relação ao tamanho do k
+prev = NULL
+taxa_erro = NULL
+k_values = 1:25
+#obs.: sempre que for realizar um loop, é bom costume começá-los vazios para garantir isso
+suppressWarnings(
+  for(i in k_values){
+    set.seed(101)
+    prev = knn(train = dados_treino,
+               test = dados_teste,
+               cl = dados_treino_labels,
+               k = i)
+    taxa_erro[i] = mean(dados_teste_labels != prev)
+  })
+
+df_erro <- data.frame(taxa_erro, k_values)
+df_erro
+
+# Plotando a relação entre as duas variáveis
+ggplot(df_erro, aes(x = k_values, y = taxa_erro)) + 
+  geom_point()+ 
+  geom_line(lty = "dotted", color = 'red') +
+  labs(title = 'Taxa de Erro em Função dos Valores de K',
+       y = 'Taxa de Erro', x = 'Valores de K') +
+  theme_classic()
+```

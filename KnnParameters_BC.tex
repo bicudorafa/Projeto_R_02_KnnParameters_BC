@@ -1,0 +1,542 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Cancer de Mama: Exemplo da Variacao de Performance Atraves da Mudanca de Parametros},
+            pdfauthor={Rafael Bicudo Rosa},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Cancer de Mama: Exemplo da Variacao de Performance Atraves da Mudanca de
+Parametros}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Rafael Bicudo Rosa}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{May 31, 8}
+
+
+\begin{document}
+\maketitle
+
+\subsection{Prevendo a Ocorrencia de
+Cancer}\label{prevendo-a-ocorrencia-de-cancer}
+
+Este trabalho e uma releitura de um projeto integrante do curso Big Data
+Analytics com R e Microsoft Azure da Formacao Cientista de Dados. O
+objetivo e analisar dados reais sobre exames de cancer de mama
+realizados com mulheres nos EUA, usar um modelo `knn' para prever a
+ocorrencia de novos casos, e ver a variacao de performance com o
+ajustamento do valor de um dos parametros.
+
+Os dados de cancer de mama incluem 569 observacoes de biopsias, cada uma
+com 32 caracteristicas (variaveis), sendo a 1a um numero de
+identificacao (ID), a 2a o diagnostico do tumor (`B' indicando benigno e
+`M' maligno), e o restante 30 medidas laboratoriais numericas. Todas as
+informacoes foram retiradas do repositorio online da Universidade de
+Irvine, California
+(\url{http://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\%28Diagnostic\%29}).
+
+Todo o projeto sera descrito de acordo com suas etapas.
+
+\subsection{Etapa 1 - Coletando os
+Dados}\label{etapa-1---coletando-os-dados}
+
+Assim como descrito acima, os dados serão retirados de um repositorio
+online contendo a base em si no formato csv, e a informacao de cada uma
+das caracteristicas.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Coletando dados}
+
+\CommentTok{# link para os dados}
+\NormalTok{link_dados <-}\StringTok{ 'http://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'}
+
+\CommentTok{# definicao dos nomes das features}
+\NormalTok{names_bc =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"id"}\NormalTok{, }\StringTok{"diagnosis"}\NormalTok{, }\StringTok{"radius_mean"}\NormalTok{, }\StringTok{"texture_mean"}\NormalTok{, }\StringTok{"perimeter_mean"}\NormalTok{, }\StringTok{"area_mean"}\NormalTok{, }\StringTok{"smoothness_mean"}\NormalTok{,}
+          \StringTok{"compactness_mean"}\NormalTok{, }\StringTok{"concavity_mean"}\NormalTok{, }\StringTok{"points_mean"}\NormalTok{, }\StringTok{"symmetry_mean"}\NormalTok{, }\StringTok{"dimension_mean"}\NormalTok{, }\StringTok{"radius_se"}\NormalTok{,}
+          \StringTok{"texture_se"}\NormalTok{, }\StringTok{"perimeter_se"}\NormalTok{, }\StringTok{"area_se"}\NormalTok{, }\StringTok{"smoothness_se"}\NormalTok{, }\StringTok{"compactness_se"}\NormalTok{, }\StringTok{"concavity_se"}\NormalTok{, }\StringTok{"points_se"}\NormalTok{,}
+          \StringTok{"symmetry_se"}\NormalTok{, }\StringTok{"dimension_se"}\NormalTok{, }\StringTok{"radius_worst"}\NormalTok{, }\StringTok{"texture_worst"}\NormalTok{, }\StringTok{"perimeter_worst"}\NormalTok{, }\StringTok{"area_worst"}\NormalTok{,}
+          \StringTok{"smoothness_worst"}\NormalTok{, }\StringTok{"compactness_worst"}\NormalTok{, }\StringTok{"concavity_worst"}\NormalTok{, }\StringTok{"points_worst"}\NormalTok{, }\StringTok{"symmetry_worst"}\NormalTok{,}\StringTok{"dimension_worst"}\NormalTok{)}
+
+\NormalTok{dados <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(link_dados, }\DataTypeTok{stringsAsFactors =}\NormalTok{ F, }\DataTypeTok{col.names =}\NormalTok{ names_bc)}
+\KeywordTok{str}\NormalTok{(dados)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    568 obs. of  32 variables:
+##  $ id               : int  842517 84300903 84348301 84358402 843786 844359 84458202 844981 84501001 845636 ...
+##  $ diagnosis        : chr  "M" "M" "M" "M" ...
+##  $ radius_mean      : num  20.6 19.7 11.4 20.3 12.4 ...
+##  $ texture_mean     : num  17.8 21.2 20.4 14.3 15.7 ...
+##  $ perimeter_mean   : num  132.9 130 77.6 135.1 82.6 ...
+##  $ area_mean        : num  1326 1203 386 1297 477 ...
+##  $ smoothness_mean  : num  0.0847 0.1096 0.1425 0.1003 0.1278 ...
+##  $ compactness_mean : num  0.0786 0.1599 0.2839 0.1328 0.17 ...
+##  $ concavity_mean   : num  0.0869 0.1974 0.2414 0.198 0.1578 ...
+##  $ points_mean      : num  0.0702 0.1279 0.1052 0.1043 0.0809 ...
+##  $ symmetry_mean    : num  0.181 0.207 0.26 0.181 0.209 ...
+##  $ dimension_mean   : num  0.0567 0.06 0.0974 0.0588 0.0761 ...
+##  $ radius_se        : num  0.543 0.746 0.496 0.757 0.335 ...
+##  $ texture_se       : num  0.734 0.787 1.156 0.781 0.89 ...
+##  $ perimeter_se     : num  3.4 4.58 3.44 5.44 2.22 ...
+##  $ area_se          : num  74.1 94 27.2 94.4 27.2 ...
+##  $ smoothness_se    : num  0.00522 0.00615 0.00911 0.01149 0.00751 ...
+##  $ compactness_se   : num  0.0131 0.0401 0.0746 0.0246 0.0335 ...
+##  $ concavity_se     : num  0.0186 0.0383 0.0566 0.0569 0.0367 ...
+##  $ points_se        : num  0.0134 0.0206 0.0187 0.0188 0.0114 ...
+##  $ symmetry_se      : num  0.0139 0.0225 0.0596 0.0176 0.0216 ...
+##  $ dimension_se     : num  0.00353 0.00457 0.00921 0.00511 0.00508 ...
+##  $ radius_worst     : num  25 23.6 14.9 22.5 15.5 ...
+##  $ texture_worst    : num  23.4 25.5 26.5 16.7 23.8 ...
+##  $ perimeter_worst  : num  158.8 152.5 98.9 152.2 103.4 ...
+##  $ area_worst       : num  1956 1709 568 1575 742 ...
+##  $ smoothness_worst : num  0.124 0.144 0.21 0.137 0.179 ...
+##  $ compactness_worst: num  0.187 0.424 0.866 0.205 0.525 ...
+##  $ concavity_worst  : num  0.242 0.45 0.687 0.4 0.535 ...
+##  $ points_worst     : num  0.186 0.243 0.258 0.163 0.174 ...
+##  $ symmetry_worst   : num  0.275 0.361 0.664 0.236 0.399 ...
+##  $ dimension_worst  : num  0.089 0.0876 0.173 0.0768 0.1244 ...
+\end{verbatim}
+
+\subsection{Etapa 2 - Preparacao dos
+Dados}\label{etapa-2---preparacao-dos-dados}
+
+Durante esta etapa, far-se-ao todas as trasformacoes necessarias a
+aplicacao do modelo, bem como observacoes interessantes acerca da
+amostra.
+
+Independentemente do metodo de aprendizagem de maquina, deve-se sempre
+excluir variaveis de indentificacao (ID). Embora possuam funcao
+importante durante etapas de limpeza e organizacao dos dados, sua
+utilizacao durante a aprendizagem pode levar a resultados equivocados,
+pois as ID atuariam como preditoras das observacoes existentes embora
+nao possuam nenhuma informacao relevante além da própria identificacao
+em si, levando a um problema de sobreidentificacao (overfitting).
+
+Em seguida, o proximo passo e a fatorizacao da caracteristica alvo: se o
+tumor e benigno ou maligno. Sua transformacao em variavel qualitativa e
+necessaria ao funcionamento do algoritimo, bem como permite a
+visualizacao das proporcoes originais atraves de uma tabela.
+
+Por fim, realiza-se a sumarizacao dos atributos com o intuito de
+identificar a existencia de anomalias, como outliers ou valores missing.
+Com a percepccao da inexistencia de anomalias, procedeu-se a
+normalizacao das variaveis numericas, pois, ao se analizar as
+estatisticas descritivas, percebeu-se como suas grandezas numericas
+variam, o que poderia causar distorcoes nas relacoes entre as variaveis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Etapa 2 - Explorando os Dados}
+
+\CommentTok{# Excluindo a coluna ID}
+\NormalTok{dados <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(dados, }\DataTypeTok{select =} \OperatorTok{-}\StringTok{ }\NormalTok{id)}
+
+\CommentTok{# Realizado o processo de Factoring em nossa variável resposta (por boa parte dos algorítimos exigir)}
+\NormalTok{dados}\OperatorTok{$}\NormalTok{diagnosis <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(dados}\OperatorTok{$}\NormalTok{diagnosis, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{'B'}\NormalTok{, }\StringTok{'M'}\NormalTok{), }\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{'Benigno'}\NormalTok{, }\StringTok{'Maligno'}\NormalTok{))}
+
+\CommentTok{# Verificado a proporção dos meus dados alvo}
+\KeywordTok{round}\NormalTok{(}\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(dados}\OperatorTok{$}\NormalTok{diagnosis))}\OperatorTok{*}\DecValTok{100}\NormalTok{, }\DataTypeTok{digits =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Benigno Maligno 
+##    62.9    37.1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Normalização dos dados}
+\KeywordTok{summary}\NormalTok{(dados)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    diagnosis    radius_mean      texture_mean   perimeter_mean  
+##  Benigno:357   Min.   : 6.981   Min.   : 9.71   Min.   : 43.79  
+##  Maligno:211   1st Qu.:11.697   1st Qu.:16.18   1st Qu.: 75.14  
+##                Median :13.355   Median :18.86   Median : 86.21  
+##                Mean   :14.120   Mean   :19.31   Mean   : 91.91  
+##                3rd Qu.:15.780   3rd Qu.:21.80   3rd Qu.:103.88  
+##                Max.   :28.110   Max.   :39.28   Max.   :188.50  
+##    area_mean      smoothness_mean   compactness_mean  concavity_mean   
+##  Min.   : 143.5   Min.   :0.05263   Min.   :0.01938   Min.   :0.00000  
+##  1st Qu.: 420.2   1st Qu.:0.08629   1st Qu.:0.06481   1st Qu.:0.02954  
+##  Median : 548.8   Median :0.09587   Median :0.09252   Median :0.06140  
+##  Mean   : 654.3   Mean   :0.09632   Mean   :0.10404   Mean   :0.08843  
+##  3rd Qu.: 782.6   3rd Qu.:0.10530   3rd Qu.:0.13040   3rd Qu.:0.12965  
+##  Max.   :2501.0   Max.   :0.16340   Max.   :0.34540   Max.   :0.42680  
+##   points_mean      symmetry_mean    dimension_mean      radius_se     
+##  Min.   :0.00000   Min.   :0.1060   Min.   :0.04996   Min.   :0.1115  
+##  1st Qu.:0.02031   1st Qu.:0.1619   1st Qu.:0.05770   1st Qu.:0.2324  
+##  Median :0.03345   Median :0.1792   Median :0.06152   Median :0.3240  
+##  Mean   :0.04875   Mean   :0.1811   Mean   :0.06277   Mean   :0.4040  
+##  3rd Qu.:0.07373   3rd Qu.:0.1956   3rd Qu.:0.06612   3rd Qu.:0.4773  
+##  Max.   :0.20120   Max.   :0.3040   Max.   :0.09744   Max.   :2.8730  
+##    texture_se      perimeter_se       area_se        smoothness_se     
+##  Min.   :0.3602   Min.   : 0.757   Min.   :  6.802   Min.   :0.001713  
+##  1st Qu.:0.8331   1st Qu.: 1.605   1st Qu.: 17.850   1st Qu.:0.005166  
+##  Median :1.1095   Median : 2.285   Median : 24.485   Median :0.006374  
+##  Mean   :1.2174   Mean   : 2.856   Mean   : 40.138   Mean   :0.007042  
+##  3rd Qu.:1.4743   3rd Qu.: 3.337   3rd Qu.: 45.017   3rd Qu.:0.008151  
+##  Max.   :4.8850   Max.   :21.980   Max.   :542.200   Max.   :0.031130  
+##  compactness_se      concavity_se       points_se       
+##  Min.   :0.002252   Min.   :0.00000   Min.   :0.000000  
+##  1st Qu.:0.013048   1st Qu.:0.01506   1st Qu.:0.007634  
+##  Median :0.020435   Median :0.02587   Median :0.010920  
+##  Mean   :0.025437   Mean   :0.03186   Mean   :0.011789  
+##  3rd Qu.:0.032218   3rd Qu.:0.04176   3rd Qu.:0.014710  
+##  Max.   :0.135400   Max.   :0.39600   Max.   :0.052790  
+##   symmetry_se        dimension_se        radius_worst   texture_worst  
+##  Min.   :0.007882   Min.   :0.0008948   Min.   : 7.93   Min.   :12.02  
+##  1st Qu.:0.015128   1st Qu.:0.0022445   1st Qu.:13.01   1st Qu.:21.09  
+##  Median :0.018725   Median :0.0031615   Median :14.96   Median :25.43  
+##  Mean   :0.020526   Mean   :0.0037907   Mean   :16.25   Mean   :25.69  
+##  3rd Qu.:0.023398   3rd Qu.:0.0045258   3rd Qu.:18.77   3rd Qu.:29.76  
+##  Max.   :0.078950   Max.   :0.0298400   Max.   :36.04   Max.   :49.54  
+##  perimeter_worst    area_worst     smoothness_worst  compactness_worst
+##  Min.   : 50.41   Min.   : 185.2   Min.   :0.07117   Min.   :0.02729  
+##  1st Qu.: 84.10   1st Qu.: 515.0   1st Qu.:0.11660   1st Qu.:0.14690  
+##  Median : 97.66   Median : 685.5   Median :0.13130   Median :0.21185  
+##  Mean   :107.13   Mean   : 878.6   Mean   :0.13232   Mean   :0.25354  
+##  3rd Qu.:125.17   3rd Qu.:1073.5   3rd Qu.:0.14600   3rd Qu.:0.33760  
+##  Max.   :251.20   Max.   :4254.0   Max.   :0.22260   Max.   :1.05800  
+##  concavity_worst   points_worst     symmetry_worst   dimension_worst  
+##  Min.   :0.0000   Min.   :0.00000   Min.   :0.1565   Min.   :0.05504  
+##  1st Qu.:0.1145   1st Qu.:0.06473   1st Qu.:0.2504   1st Qu.:0.07141  
+##  Median :0.2266   Median :0.09984   Median :0.2821   Median :0.08002  
+##  Mean   :0.2714   Mean   :0.11434   Mean   :0.2898   Mean   :0.08388  
+##  3rd Qu.:0.3814   3rd Qu.:0.16132   3rd Qu.:0.3177   3rd Qu.:0.09206  
+##  Max.   :1.2520   Max.   :0.29100   Max.   :0.6638   Max.   :0.20750
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# função base R para normalização -> scale}
+\NormalTok{dados_normalizados <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{scale}\NormalTok{(dados[}\DecValTok{2}\OperatorTok{:}\DecValTok{31}\NormalTok{]))}
+
+\CommentTok{# Fazendo uma comparação entre algumas features antes e após}
+\KeywordTok{summary}\NormalTok{(dados[}\KeywordTok{c}\NormalTok{(}\StringTok{"radius_mean"}\NormalTok{, }\StringTok{"area_mean"}\NormalTok{, }\StringTok{"smoothness_mean"}\NormalTok{)])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   radius_mean       area_mean      smoothness_mean  
+##  Min.   : 6.981   Min.   : 143.5   Min.   :0.05263  
+##  1st Qu.:11.697   1st Qu.: 420.2   1st Qu.:0.08629  
+##  Median :13.355   Median : 548.8   Median :0.09587  
+##  Mean   :14.120   Mean   : 654.3   Mean   :0.09632  
+##  3rd Qu.:15.780   3rd Qu.: 782.6   3rd Qu.:0.10530  
+##  Max.   :28.110   Max.   :2501.0   Max.   :0.16340
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(dados_normalizados[}\KeywordTok{c}\NormalTok{(}\StringTok{"radius_mean"}\NormalTok{, }\StringTok{"area_mean"}\NormalTok{, }\StringTok{"smoothness_mean"}\NormalTok{)])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   radius_mean        area_mean       smoothness_mean  
+##  Min.   :-2.0263   Min.   :-1.4514   Min.   :-3.1106  
+##  1st Qu.:-0.6877   1st Qu.:-0.6652   1st Qu.:-0.7142  
+##  Median :-0.2173   Median :-0.2999   Median :-0.0325  
+##  Mean   : 0.0000   Mean   : 0.0000   Mean   : 0.0000  
+##  3rd Qu.: 0.4710   3rd Qu.: 0.3647   3rd Qu.: 0.6392  
+##  Max.   : 3.9704   Max.   : 5.2475   Max.   : 4.7756
+\end{verbatim}
+
+\subsection{Etapa 3 - Treinando o
+modelo}\label{etapa-3---treinando-o-modelo}
+
+Com os dados devidamente preparados, pode-se, agora, comecar o processo
+de treinamento do modelo. Para isso, carregam-se os pacotes necessarios
+a execucao, dividi-se nosso conjunto em dados de treino e de teste, e se
+inicia a criacao do 1o modelo com os parametros padroes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Etapa 3: Treinando o modelo}
+
+\CommentTok{# Carregando os pacotes necessários}
+\CommentTok{# install.packages("class")}
+\CommentTok{# install.packages("caTools")}
+\KeywordTok{library}\NormalTok{(caTools)}
+\KeywordTok{library}\NormalTok{(class)}
+
+\CommentTok{# Criando os dados de treino e os de teste (obs.: neste dataset em especial não seria }
+\CommentTok{# necessário por ser randomizado originalmente)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{69}\NormalTok{)}
+\NormalTok{amostra <-}\StringTok{ }\KeywordTok{sample.split}\NormalTok{(dados}\OperatorTok{$}\NormalTok{diagnosis, }\DataTypeTok{SplitRatio =} \FloatTok{0.70}\NormalTok{)}
+\NormalTok{dados_treino <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{subset}\NormalTok{(dados_normalizados, amostra }\OperatorTok{==}\StringTok{ }\NormalTok{T))}
+\NormalTok{dados_teste <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{subset}\NormalTok{(dados_normalizados, amostra }\OperatorTok{==}\StringTok{ }\NormalTok{F))}
+
+\CommentTok{# Criando os labels para identificação no modelo}
+\NormalTok{dados_treino_labels <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(dados[}\DecValTok{1}\NormalTok{], amostra }\OperatorTok{==}\StringTok{ }\NormalTok{T)[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{dados_teste_labels <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(dados[}\DecValTok{1}\NormalTok{], amostra }\OperatorTok{==}\StringTok{ }\NormalTok{F)[,}\DecValTok{1}\NormalTok{]}
+
+\CommentTok{# Criando o Modelo}
+\NormalTok{modelo <-}\StringTok{ }\KeywordTok{knn}\NormalTok{(}\DataTypeTok{train =}\NormalTok{ dados_treino,}
+              \DataTypeTok{test =}\NormalTok{ dados_teste,}
+              \DataTypeTok{cl =}\NormalTok{ dados_treino_labels)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Etapa 4 - Avaliando a Performance do
+Modelo}\label{etapa-4---avaliando-a-performance-do-modelo}
+
+Nesta etapa, acontecerá a analise da eficacia do modelo. Para se chegar
+a esse resultado, o pacote `gmodels' será carregado e utilizado para
+construir uma matriz de confusao, ou tabela cruzada, com o objetivo de
+se identifcar os casos corretamente previsto, no caso, com 4 falso
+negativos ou 97,6 \% de acuracia.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Carregando pacote necessario}
+\CommentTok{# install.packages("gmodels")}
+\KeywordTok{library}\NormalTok{(gmodels)}
+
+\CommentTok{# Criando uma tabela cruzada dos dados previstos x dados atuais, ou seja, uma ConfusionMatrix e analisando taxa de erro}
+\KeywordTok{CrossTable}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dados_teste_labels, }\DataTypeTok{y =}\NormalTok{ modelo, }\DataTypeTok{prop.chisq =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  170 
+## 
+##  
+##                    | modelo 
+## dados_teste_labels |   Benigno |   Maligno | Row Total | 
+## -------------------|-----------|-----------|-----------|
+##            Benigno |       104 |         3 |       107 | 
+##                    |     0.972 |     0.028 |     0.629 | 
+##                    |     0.972 |     0.048 |           | 
+##                    |     0.612 |     0.018 |           | 
+## -------------------|-----------|-----------|-----------|
+##            Maligno |         3 |        60 |        63 | 
+##                    |     0.048 |     0.952 |     0.371 | 
+##                    |     0.028 |     0.952 |           | 
+##                    |     0.018 |     0.353 |           | 
+## -------------------|-----------|-----------|-----------|
+##       Column Total |       107 |        63 |       170 | 
+##                    |     0.629 |     0.371 |           | 
+## -------------------|-----------|-----------|-----------|
+## 
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxa_erro_inicial =}\StringTok{ }\KeywordTok{mean}\NormalTok{(dados_teste_labels }\OperatorTok{!=}\StringTok{ }\NormalTok{modelo)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Etapa 5 - Otimizacao do
+Modelo}\label{etapa-5---otimizacao-do-modelo}
+
+Por último, como objetivo do trabalho, analizar-se-a a mudanca na
+performance do modelo atraves da variacao do parametro k, ou seja, o
+numero de vizinhos mais proximos (em distancia euclidiana) utilizados
+para definir a classificacao. Assim será feito um plot, com o uso do
+pacote `ggplot2', demonstrando como a performance, de fato, altera-se
+consideravelmente com uma adocao de `k' variando de 1 ate 25.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{## Otimizacao do Modelo}
+
+\CommentTok{# Carregando pacote necessario}
+\CommentTok{# install.package('ggplot2')}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+
+\CommentTok{# Calculando função taxa de erro em relação ao tamanho do k}
+\NormalTok{prev =}\StringTok{ }\OtherTok{NULL}
+\NormalTok{taxa_erro =}\StringTok{ }\OtherTok{NULL}
+\NormalTok{k_values =}\StringTok{ }\DecValTok{1}\OperatorTok{:}\DecValTok{25}
+\CommentTok{#obs.: sempre que for realizar um loop, é bom costume começá-los vazios para garantir isso}
+\KeywordTok{suppressWarnings}\NormalTok{(}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in}\NormalTok{ k_values)\{}
+    \KeywordTok{set.seed}\NormalTok{(}\DecValTok{101}\NormalTok{)}
+\NormalTok{    prev =}\StringTok{ }\KeywordTok{knn}\NormalTok{(}\DataTypeTok{train =}\NormalTok{ dados_treino,}
+               \DataTypeTok{test =}\NormalTok{ dados_teste,}
+               \DataTypeTok{cl =}\NormalTok{ dados_treino_labels,}
+               \DataTypeTok{k =}\NormalTok{ i)}
+\NormalTok{    taxa_erro[i] =}\StringTok{ }\KeywordTok{mean}\NormalTok{(dados_teste_labels }\OperatorTok{!=}\StringTok{ }\NormalTok{prev)}
+\NormalTok{  \})}
+
+\NormalTok{df_erro <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(taxa_erro, k_values)}
+\NormalTok{df_erro}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     taxa_erro k_values
+## 1  0.03529412        1
+## 2  0.02941176        2
+## 3  0.01764706        3
+## 4  0.03529412        4
+## 5  0.01764706        5
+## 6  0.02352941        6
+## 7  0.01764706        7
+## 8  0.02352941        8
+## 9  0.02352941        9
+## 10 0.01764706       10
+## 11 0.02352941       11
+## 12 0.02941176       12
+## 13 0.02941176       13
+## 14 0.02941176       14
+## 15 0.03529412       15
+## 16 0.02941176       16
+## 17 0.02941176       17
+## 18 0.02941176       18
+## 19 0.02352941       19
+## 20 0.02352941       20
+## 21 0.02352941       21
+## 22 0.02352941       22
+## 23 0.02352941       23
+## 24 0.02352941       24
+## 25 0.02352941       25
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plotando a relação entre as duas variáveis}
+\KeywordTok{ggplot}\NormalTok{(df_erro, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ k_values, }\DataTypeTok{y =}\NormalTok{ taxa_erro)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{lty =} \StringTok{"dotted"}\NormalTok{, }\DataTypeTok{color =} \StringTok{'red'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{'Taxa de Erro em Função dos Valores de K'}\NormalTok{,}
+       \DataTypeTok{y =} \StringTok{'Taxa de Erro'}\NormalTok{, }\DataTypeTok{x =} \StringTok{'Valores de K'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{KnnParameters_BC_files/figure-latex/otimizacao-1.pdf}
+
+
+\end{document}
